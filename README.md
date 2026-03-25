@@ -103,7 +103,9 @@ Use Python's local HTTP server to bypass browser microphone security policies fo
 ```Bash
 python -m http.server 3000
 ```
+
 **5. Test the UI:**
 Open your browser and navigate to "http://localhost:3000" to test the Voice Chatbot.
+
 ---
 ## 🧑‍💻 Developed By : V. Jai Sri Charan 
