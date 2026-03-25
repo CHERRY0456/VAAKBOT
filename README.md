@@ -5,9 +5,7 @@ This repository contains the proof-of-concept (POC) for VaakBot, a real-time Hin
 ---
 
 ## 🎥 Demonstration of the ChatBot
-<p align="center" width="100%">
-  <video src="https://github.com/CHERRY0456/VAAKBOT/blob/main/Files/VAAKBOT%20Chat%20UI%20(1).mp4" width="80%" controls></video>
-</p>
+I have included the recordings and screenshots of my chatbot inside the files folder do check out.
 
 ---
 
