@@ -1,4 +1,4 @@
-# 🇮🇳 VaakBot: Real-Time Voice Assistant (POC)
+# VaakBot: Real-Time Voice Assistant (POC)
 
 This repository contains the proof-of-concept (POC) for VaakBot, a real-time Hinglish voice assistant designed for noisy environments. It demonstrates a low-latency, privacy-first audio processing pipeline using edge-based noise suppression and cloud-based intent routing.
 
