@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)-7s  %(
 log = logging.getLogger("vaakbot")
 
 load_dotenv()  # Load environment variables from .env file
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY","SECRET KEY")  # Ensure you have this in your .env file
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY","")  # Ensure you have this in your .env file
 if not GEMINI_API_KEY:
     log.error("CRITICAL: GEMINI_API_KEY environment variable is not set. Setup your .env file.")
     exit(1)
