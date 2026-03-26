@@ -39,6 +39,7 @@ During development, we upgraded the system from a technical visualization dashbo
     * **Dynamic Mother-Tongue Translation:** The AI now listens to the audio, detects the dialect/language, and dynamically returns the `ui_confirm` and `ui_reject` strings translated into the exact language the user spoke.
     * **Memory Safety:** Added `ensure_48khz_wav` to strictly format the audio bytes in volatile RAM (`io.BytesIO`) before sending them to the LLM, ensuring perfect compatibility without writing to the physical disk.
 
+*The clean and updated new codes are in the new folder file.*
 ---
 ## 🏛️ System Architecture
 
