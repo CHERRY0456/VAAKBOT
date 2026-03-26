@@ -98,6 +98,10 @@ GEMINI_API_KEY="your_api_key_here"
 ```Bash
 uvicorn new_backend:app --host 0.0.0.0 --port 8000 --reload
 ```
+or
+```bash
+pyhton new_backend.py
+```
 
 **4. Serve the frontend:**
 Use Python's local HTTP server to bypass browser microphone security policies for local files:
