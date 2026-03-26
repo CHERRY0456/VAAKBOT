@@ -18,7 +18,7 @@ if not GEMINI_API_KEY:
 
 # Configure the Gemini SDK
 genai.configure(api_key=GEMINI_API_KEY)
-# Using 1.5 Flash because it is insanely fast for audio transcription
+# Using 2.5 Flash because it is insanely fast for audio transcription
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 app = FastAPI(title="VaakBot Backend", version="2.0.0")
