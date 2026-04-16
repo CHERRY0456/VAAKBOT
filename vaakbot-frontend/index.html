@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VaakBot — Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root { 
+    --bg: #f3f4f6; 
+    --surface: #ffffff; 
+    --border: #e5e7eb; 
+    --primary: #2563eb; 
+    --primary-hover: #1d4ed8;
+    --text-main: #111827; 
+    --text-muted: #6b7280; 
+    --bot-bg: #f8fafc;
+    --user-bg: #2563eb;
+    --error: #ef4444;
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { 
+    background: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; 
+    height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px;
+  }
+  
+  .app-container {
+    width: 100%; max-width: 480px; height: 90vh; max-height: 800px;
+    background: var(--surface); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border);
+  }
+
+  /* Header */
+  .header {
+    padding: 20px; background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px; z-index: 10;
+  }
+  .header-icon {
+    width: 36px; height: 36px; background: var(--primary); color: white;
+    border-radius: 10px; display: grid; place-items: center; font-weight: 600; font-size: 18px;
+  }
+  .header-title { font-weight: 600; font-size: 1.1rem; }
+  .header-status { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+
+  /* Chat Area */
+  .chat-area {
+    flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+    background: #f9fafb;
+  }
+  .chat-area::-webkit-scrollbar { width: 6px; }
+  .chat-area::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+  .msg-wrapper { display: flex; flex-direction: column; max-width: 85%; animation: slideIn 0.3s ease; }
+  .msg-wrapper.bot { align-self: flex-start; }
+  .msg-wrapper.user { align-self: flex-end; align-items: flex-end; }
+
+  .msg-bubble {
+    padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5;
+  }
+  .msg-wrapper.bot .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 4px; color: var(--text-main); }
+  .msg-wrapper.user .msg-bubble { background: var(--user-bg); color: #fff; border-bottom-right-radius: 4px; }
+  
+  .msg-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; padding: 0 4px; }
+
+  /* Interactive Confirm Buttons */
+  .confirm-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .btn-action {
+    padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface);
+    font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--text-main);
+  }
+  .btn-action.yes { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+  .btn-action.yes:hover { background: #d1fae5; }
+  .btn-action.no { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+  .btn-action.no:hover { background: #fee2e2; }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Input Area */
+  .input-area {
+    padding: 16px 20px; background: var(--surface); border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .text-input {
+    flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 24px;
+    background: #f3f4f6; font-family: inherit; font-size: 0.95rem; outline: none; color: var(--text-muted);
+  }
+  .mic-btn {
+    width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--primary); color: white;
+    font-size: 1.2rem; cursor: pointer; display: grid; place-items: center; transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); flex-shrink: 0;
+  }
+  .mic-btn:hover:not(:disabled) { background: var(--primary-hover); transform: scale(1.05); }
+  .mic-btn:disabled { background: var(--text-muted); cursor: not-allowed; transform: none; box-shadow: none; }
+  
+  /* Recording Pulse */
+  .mic-btn.recording {
+    background: var(--error);
+    animation: pulseMic 1.5s infinite;
+  }
+  @keyframes pulseMic {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+    70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  }
+
+  .system-notice { text-align: center; font-size: 0.75rem; color: var(--text-muted); padding-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="header">
+    <div class="header-icon">व</div>
+    <div>
+      <div class="header-title">VaakBot</div>
+      <div class="header-status" id="systemStatus"><div class="status-dot"></div> Ready</div>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <div class="msg-wrapper bot">
+      <div class="msg-bubble">नमस्ते! I am VaakBot. Tap the microphone and speak in your language.</div>
+      <div class="msg-time">System</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" class="text-input" placeholder="Tap mic to speak..." disabled />
+    <button class="mic-btn" id="btnMic" onclick="toggleRecording()">🎙</button>
+  </div>
+  <div class="system-notice"> </div> 
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
